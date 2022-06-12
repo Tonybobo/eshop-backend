@@ -1,3 +1,2 @@
 venv
-
-api/api/settings.py
+api/api/.env

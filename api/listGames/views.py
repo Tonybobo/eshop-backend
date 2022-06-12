@@ -2,10 +2,13 @@ from decimal import Decimal
 from locale import currency
 from .models import Games, Currency
 from .serializers import GamesSerializer , CurrencySerializer
+from rest_framework import generics
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination 
+from rest_framework import filters
+
 
 
 # Create your views here.
@@ -64,3 +67,9 @@ class AllCurrency(ListAPIView):
         allCurrency = Currency.objects.all()
         serializer = CurrencySerializer(allCurrency , many =True)
         return Response(serializer.data , status=status.HTTP_200_OK)
+    
+class SearchGame(ListAPIView):
+    queryset = Games.objects.all()
+    serializer_class = GamesSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title']

@@ -12,6 +12,8 @@ class Games(models.Model):
     msrp = models.DecimalField(max_digits=10, decimal_places=2)
     publishers = models.TextField()
     releaseDate = models.DateField()
+    store = models.TextField(blank=True)
+    
     
     class Meta:
         ordering = ['title']
