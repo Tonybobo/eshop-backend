@@ -10,3 +10,8 @@ class CurrencySerializer(serializers.ModelSerializer):
     class Meta:
         model = Currency
         fields = ['id']
+        
+class SearchGamesSerializer (serializers.ModelSerializer):
+    class Meta:
+        model = Games
+        fields = ['title' , 'imageUrl']

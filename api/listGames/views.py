@@ -1,13 +1,12 @@
-from decimal import Decimal
+
 from locale import currency
 from .models import Games, Currency
-from .serializers import GamesSerializer , CurrencySerializer
-from rest_framework import generics
+from .serializers import GamesSerializer , CurrencySerializer, SearchGamesSerializer
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination 
-from rest_framework import filters
+from django.db.models import Q , Subquery , F 
 
 
 
@@ -69,7 +68,14 @@ class AllCurrency(ListAPIView):
         return Response(serializer.data , status=status.HTTP_200_OK)
     
 class SearchGame(ListAPIView):
-    queryset = Games.objects.all()
-    serializer_class = GamesSerializer
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['title']
+  
+    serializer_class = SearchGamesSerializer
+    
+    def get_queryset(self):
+        searchTerm = self.request.query_params.get('search')
+        games = Games.objects.filter(Q(title__icontains=searchTerm) & Q(imageUrl__isnull=False) & Q(description__isnull=False))
+        
+        titles = set()
+        newlist = [i for i in games if i.title not in titles and titles.add(i.title) is None]
+
+        return newlist
