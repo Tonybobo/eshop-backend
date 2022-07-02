@@ -6,34 +6,40 @@ from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination 
-from django.db.models import Q , Subquery , F 
+from django.db.models import Q 
+from rest_framework_mongoengine import viewsets
 
 
 
 # Create your views here.
-class ListGamesView(ListAPIView):
+class ListGamesView(viewsets.ModelViewSet):
+
    
     def get(self,request):
+                
+    
         games = Games.objects.all().order_by('-releaseDate')
-        region = request.query_params.get('currency', 'SGD')
-        local = Currency.objects.get(id=region)
-        localRate = local.rate
+
+    
+        
+        # region = request.query_params.get('currency', 'SGD')
+        # local = Currency.objects.get(id=region)
+        # localRate = local.rate
          
         paginator = PageNumberPagination()
         result_page = paginator.paginate_queryset(games , request)
       
-        for game in result_page:
+        # for game in result_page:
             
-            currency = game.currency
-            convertionRate = Currency.objects.get(id=currency)
-            rates = convertionRate.rate
-            # divide first then mutiply
-            if game.lowestPrice is not None:
-                game.lowestPrice = (game.lowestPrice / rates) *localRate
-            if game.msrp is not None:
-                game.msrp = (game.msrp / rates) *localRate
-            if game.currentPrice is not None:
-                game.currentPrice = (game.currentPrice /rates)*localRate
+        #     print(game.title)
+            
+        #     currency = game.currency
+        #     convertionRate = Currency.objects.get(id=currency)
+        #     rates = convertionRate.rate
+        #     # divide first then mutiply
+        #    
+        #     if game.currentPrice is not None:
+        #         game.currentPrice = (game.currentPrice /rates)*localRate
         
         serializer = GamesSerializer(result_page , many=True)
         response = Response(serializer.data , status=status.HTTP_200_OK)

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import environ
+import mongoengine
 
 env = environ.Env()
 environ.Env.read_env()
@@ -43,7 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'listGames.apps.ListgamesConfig',
-    'corsheaders'
+    'corsheaders',
+    'rest_framework_mongoengine'
 ]
 
 MIDDLEWARE = [
@@ -84,16 +86,12 @@ WSGI_APPLICATION = 'api.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'djongo',
-        'NAME': 'eshop',
-        'ENFORCE_SCHEMA': False,
-        'CLIENT': {
-            'host': env('DATABASE_URL')
-        }
-    },
+    'default':{ 'ENGINE': 'django.db.backends.sqlite3', 'NAME': 'mydatabase', },
   
 }
+
+mongoengine.connect( host='mongodb+srv://tonybo:tonybo_95@cluster0.gtlo5.mongodb.net/eshop?retryWrites=true&w=majority')
+
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS' : 'rest_framework.pagination.PageNumberPagination',

@@ -1,17 +1,18 @@
-from rest_framework import serializers
+from rest_framework_mongoengine import serializers
+
 from .models import Games , Currency
 
-class GamesSerializer (serializers.ModelSerializer):
+class GamesSerializer (serializers.DocumentSerializer):
     class Meta:
         model = Games
         fields = '__all__'
         
-class CurrencySerializer(serializers.ModelSerializer):
+class CurrencySerializer(serializers.DocumentSerializer):
     class Meta:
         model = Currency
-        fields = ['id']
+        fields = '__all__'
         
-class SearchGamesSerializer (serializers.ModelSerializer):
+class SearchGamesSerializer (serializers.DocumentSerializer):
     class Meta:
         model = Games
         fields = ['title' , 'imageUrl']
