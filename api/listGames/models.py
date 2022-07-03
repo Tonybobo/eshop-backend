@@ -6,11 +6,11 @@ from mongoengine import Document, EmbeddedDocument, fields
 class Games(Document):
 
     title = fields.StringField()
-    description = fields.StringField()
-    imageUrl = fields.StringField()
+    description = fields.StringField(null=True)
+    imageUrl = fields.StringField(null=True)
     store = fields.DictField()
     msrp =  fields.DictField()
-    publishers = fields.StringField()
+    publishers = fields.StringField(null=True)
     releaseDate = fields.DateTimeField()
     class Meta:
         ordering = ['title']

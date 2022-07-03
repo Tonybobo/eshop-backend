@@ -6,7 +6,7 @@ from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination 
-from django.db.models import Q 
+from mongoengine.queryset.visitor import Q
 from rest_framework_mongoengine import viewsets
 
 
@@ -16,31 +16,10 @@ class ListGamesView(viewsets.ModelViewSet):
 
    
     def get(self,request):
-                
-    
         games = Games.objects.all().order_by('-releaseDate')
-
-    
-        
-        # region = request.query_params.get('currency', 'SGD')
-        # local = Currency.objects.get(id=region)
-        # localRate = local.rate
-         
         paginator = PageNumberPagination()
         result_page = paginator.paginate_queryset(games , request)
-      
-        # for game in result_page:
-            
-        #     print(game.title)
-            
-        #     currency = game.currency
-        #     convertionRate = Currency.objects.get(id=currency)
-        #     rates = convertionRate.rate
-        #     # divide first then mutiply
-        #    
-        #     if game.currentPrice is not None:
-        #         game.currentPrice = (game.currentPrice /rates)*localRate
-        
+
         serializer = GamesSerializer(result_page , many=True)
         response = Response(serializer.data , status=status.HTTP_200_OK)
         return response
@@ -79,8 +58,8 @@ class SearchGame(ListAPIView):
     
     def get_queryset(self):
         searchTerm = self.request.query_params.get('search')
-        games = Games.objects.filter(Q(title__icontains=searchTerm) & Q(imageUrl__isnull=False) & Q(description__isnull=False))
-        
+        games = Games.objects.filter(Q(title__icontains=searchTerm) & Q(imageUrl__ne=None))
+        print(games)
         titles = set()
         newlist = [i for i in games if i.title not in titles and titles.add(i.title) is None]
 
