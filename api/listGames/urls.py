@@ -3,7 +3,7 @@ from .views import AllCurrency, ListGamesView , ListGameView, SearchGame
 
 urlpatterns = [
    path('' , ListGamesView.as_view({'get': 'get'})),
-   path('<id>' , ListGameView.as_view()),
+   path('<title>' , ListGameView.as_view()),
    path('currency/all' , AllCurrency.as_view()),
    path('searchGames/' , SearchGame.as_view())
    

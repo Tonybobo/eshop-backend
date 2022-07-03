@@ -26,22 +26,22 @@ class ListGamesView(viewsets.ModelViewSet):
         
 class ListGameView(ListAPIView):
     
-    def get(self,request,id):
-        game = Games.objects.get(id=id)
+    def get(self,request, title):
+        print(title)
+        game = Games.objects.get(title=title)
         region = request.query_params.get('currency', 'SGD')
         local = Currency.objects.get(id=region)
         localRate = local.rate
-        currency = game.currency
-        convertionRate = Currency.objects.get(id=currency)
-        rates = convertionRate.rate
-        if game.lowestPrice is not None:
-            game.lowestPrice = (game.lowestPrice / rates) *localRate
-        if game.msrp is not None:
-            game.msrp = (game.msrp / rates) *localRate
-        if game.currentPrice is not None:
-            game.currentPrice = (game.currentPrice /rates)*localRate
-       
-        
+        store = game.store
+        for key  in store:
+            market = store[key]    
+            currency = market.get('currency')
+            convertionRate = Currency.objects.get(id=currency)
+            rates = convertionRate.rate
+            if market.get('price') is not None:
+                market['price'] = (market.get('price') / float(rates)) *float(localRate)
+           
+    
         serializer = GamesSerializer(game)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
@@ -59,7 +59,6 @@ class SearchGame(ListAPIView):
     def get_queryset(self):
         searchTerm = self.request.query_params.get('search')
         games = Games.objects.filter(Q(title__icontains=searchTerm) & Q(imageUrl__ne=None))
-        print(games)
         titles = set()
         newlist = [i for i in games if i.title not in titles and titles.add(i.title) is None]
 
