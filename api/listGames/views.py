@@ -8,6 +8,7 @@ from rest_framework import status
 from rest_framework.pagination import PageNumberPagination 
 from mongoengine.queryset.visitor import Q
 from rest_framework_mongoengine import viewsets
+from .pagination import CustomPagination
 
 
 
@@ -17,12 +18,14 @@ class ListGamesView(viewsets.ModelViewSet):
    
     def get(self,request):
         games = Games.objects.all().order_by('-releaseDate')
-        paginator = PageNumberPagination()
-        result_page = paginator.paginate_queryset(games , request)
-
-        serializer = GamesSerializer(result_page , many=True)
-        response = Response(serializer.data , status=status.HTTP_200_OK)
-        return response
+        paginator = CustomPagination()
+        result_page = paginator.paginate_queryset(games,request)
+        if result_page is not None:
+            serializer = GamesSerializer(result_page , many=True)
+            result = paginator.get_paginated_response(serializer.data)
+            print(result)
+            response = Response(result.data , status=status.HTTP_200_OK)
+            return response
         
 class ListGameView(ListAPIView):
     
