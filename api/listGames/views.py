@@ -23,7 +23,7 @@ class ListGamesView(viewsets.ModelViewSet):
         if result_page is not None:
             serializer = GamesSerializer(result_page , many=True)
             result = paginator.get_paginated_response(serializer.data)
-            print(result)
+         
             response = Response(result.data , status=status.HTTP_200_OK)
             return response
         

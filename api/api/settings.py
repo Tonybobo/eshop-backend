@@ -95,7 +95,7 @@ mongoengine.connect( host='mongodb+srv://tonybo:tonybo_95@cluster0.gtlo5.mongodb
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS' : 'listGames.pagination.CustomPagination',
-    'PAGE_SIZE' : 50
+    'PAGE_SIZE' : 30
 }
 
 
