@@ -90,7 +90,7 @@ DATABASES = {
   
 }
 
-mongoengine.connect( host='mongodb+srv://tonybo:tonybo_95@cluster0.gtlo5.mongodb.net/eshop?retryWrites=true&w=majority')
+mongoengine.connect( host='mongodb+srv://<username>:<password>@cluster0.gtlo5.mongodb.net/eshop?retryWrites=true&w=majority')
 
 
 REST_FRAMEWORK = {
