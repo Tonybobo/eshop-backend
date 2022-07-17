@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-a50p$d@tthyjsp54ib*$n&4xq8zj5jqklr#_fpc$zm!1bxay7c
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'http://127.0.0.1:3000' ]
+ALLOWED_HOSTS = ['https://nintendo-shop.web.app',  ]
 
 
 # Application definition
